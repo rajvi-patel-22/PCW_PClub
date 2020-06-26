@@ -1,0 +1,238 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PClub | Blog</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'style/addblog.css' %}">
+    <link rel="stylesheet" href="{% static 'style/header.css' %}">
+    <link rel="stylesheet" href="{% static 'style/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'style/blog.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-image:  linear-gradient(rgba(243, 243, 243, 0.863), rgba(12, 95, 88, 0.918)), url('/static/images/t2.jpg ');">
+     <div class="wrapper" >
+      
+      <header>
+        <nav>
+          <div class="menu-icon">
+            <i class="fa fa-bars fa-2x"></i>
+          </div>
+          <div class="logo">
+            <img src="{% static 'images/0LogoBlack.jpg' %}">
+          </div> 
+          <div class="menu">
+            <ul>  
+              <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+              <li><a href="{% url 'events' %}">Events</a></li>
+              <li><a href="{% url 'resources' %}">Resources</a></li>
+              <li><a href="{% url 'aboutus' %}">About</a></li>
+              <li><a href="{% url 'blog' %}">blog</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>   <!--Header End-->
+           
+     
+        <section class="blog-post-area">
+            <div class="container">
+                <div class="row">
+                    <div class="blog-post-area-style">                    
+
+                      <button type="submit" class="btn btn-info" style="width: 40%;margin:0% 30%;margin-top:5%"  data-toggle="modal" data-target="#myModal">Add Blog</button>
+
+                      <div class="modal" id="myModal" style="background-color: rgba(0, 0, 0, 0.61);">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            
+                            <div class="login-box" style="margin-top: 300px;">
+                              <form action="addblog" method="POST" enctype="multipart/form-data">
+                                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+                                {% csrf_token %}
+                                <h1>Add Blog</h1>
+                                <div class="textbox">
+                                  <i class="fas fa-user"></i>
+                                  <input type="text"  id="user_name" placeholder="Enter Name" maxlength="40" name="user_name" required>
+                                </div>
+                                <div class="textbox">
+                                  <i class="fas fa-envelope"></i>
+                                  <input type="text"  id="user_emailId" placeholder="Enter Email" maxlength="50" name="user_emailId" required>
+                                </div>
+                                <div class="textbox">
+                                  <i class="fa fa-delicious"></i>
+                                  <input type="text"  id="Enrollment_ID" placeholder="Enrollment No" maxlength="7" title="Integer Format" name="Enrollment_ID" required>
+                                </div>
+                                <div class="textbox">
+                                  <i class="fas fa-keyboard-o"></i>
+                                  <input type="text"  id="BlogTitle" placeholder="Blog Title" maxlength="35" name="BlogTitle" required>
+                                </div>
+                                <div class="textbox">
+                                  <i class="fas fa-keyboard-o"></i>
+                                  <input type="text"  id="BlogDesc" placeholder="Blog Desc" maxlength="300" name="BlogDesc" required>
+                                </div>
+                                
+                              <button type="submit" id="submit" name="submit" class="btn btn-danger" >Submit</button>
+                              </form>  
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      {% for b in blog %}
+                      <div class="col-md-3">
+                          <div class="single-post">
+                              <h3><a href="#">{{b.BlogTitle}}</a></h3>
+                              <h4><span><i class="fa fa-pencil" style="padding-right: 2%;"></i>Posted By: <span class="author-name">{{b.user_name}}</span></span>
+                              </h4>
+                              <p class="comment more" >{{b.BlogDesc}}</p>
+                              <h4><span><i class="fa fa-calendar" style="padding-right: 1%;"></i>{{b.uploaded_at.day}} {{b.uploaded_at|date:'F'}}, {{b.uploaded_at.year}}</span></h4>
+                          </div>
+                      </div>
+                      {% endfor %}
+                                            
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+         <!-- Footer -->
+      <section id="footer">
+        <div class="container">
+          <div class="row text-center text-xs-center text-sm-left text-md-left">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+              <h5>Quick links</h5>
+              <ul class="list-unstyled quick-links">
+                <li><a href="{% url 'home' %}"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                <li><a href="{% url 'events' %}"><i class="fa fa-angle-double-right"></i>Events</a></li>
+                <li><a href="{% url 'resources' %}"><i class="fa fa-angle-double-right"></i>Resources</a></li>
+                <li><a href="{% url 'aboutus' %}"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-24 col-sm-8 col-md-8">
+              <h5>Info</h5>
+              <ul class="list-unstyled quick-links info">
+                <li class="extra-space"><i class="fa fa-map-marker"></i>
+                  <a href="https://maps.app.goo.gl/GQxmZ268wY8J7USx8"> Commerce Six Roads, Swastik Society, Navrangpura, Ahmedabad, Gujarat 380009</a></li>
+                <li><i class="fa fa-envelope"></i>
+                    <a href="https://www.google.com/intl/en_in/gmail/about/">Communications@ahduni.edu.in</a></li>
+                <li class="extra-space"><i class="fa fa-phone"></i>
+                    <a>079 6191 1200</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row remove-space">
+            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+              <ul class="list-unstyled list-inline social text-center">
+                <li class="list-inline-item"><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+              </ul>
+            </div>
+            <hr>
+          </div>	
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">				
+              <p class="h6">Created By:</p><p>  Hetvi Suthar & Rajvi Patel </p>
+            </div>
+            <hr>
+          </div>	
+        </div>
+      </section>
+    
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/active.js' %}"></script>
+    <script>
+      // Scrolling Effect
+
+      $(window).on("scroll", function() {
+            if($(window).scrollTop()) {
+              $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+              $('nav').addClass('black');     
+            }
+            else {
+              $('.logo img').attr('src',"{% static 'images/0LogoBlack.jpg' %}");
+              $('nav').removeClass('black');
+            
+            }
+      })
+      // Header Effect
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+
+      $(document).ready(function() {
+            $(".logo").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+    </script>   
+
+    <script>
+
+      // Script For Upload Image From Profile pic  
+      $('#file-upload').change(function() {
+            var i = $(this).prev('label').clone();
+            var file = $('#file-upload')[0].files[0].name;
+            $(this).prev('label').text(file);
+        });
+
+     $(document).ready(function() {
+      var showChar = 150;
+      var ellipsestext = "...";
+      var moretext = "more";
+      var lesstext = "less";
+      $('.more').each(function() {
+        var content = $(this).html();
+    
+        if(content.length > showChar) {
+    
+          var c = content.substr(0, showChar);
+          var h = content.substr(showChar-1, content.length - showChar);
+    
+          var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+    
+          $(this).html(html);
+        }
+    
+      });
+    
+      $(".morelink").click(function(){
+        if($(this).hasClass("less")) {
+          $(this).removeClass("less");
+          $(this).html(moretext);
+        } else {
+          $(this).addClass("less");
+          $(this).html(lesstext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+      });
+    });
+    </script>
+</body>
+
+</html>

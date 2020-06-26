@@ -1,0 +1,355 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+{% static "images" as baseUrl %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Rescources | PClub</title>
+      <link rel="stylesheet" href="{% static 'style/header.css' %}">
+      <link rel="stylesheet" href="{% static 'style/resources.css' %}">
+      <link rel="stylesheet" href="{% static 'style/footer.css' %}">
+      <link rel="stylesheet" href="{% static 'style/Gallery.css' %}">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    </head>
+    
+    <body>
+      <div class="wrapper">
+        <header>
+          <nav>
+            <div class="menu-icon">
+              <i class="fa fa-bars fa-2x"></i>
+            </div>
+
+            <div class="logo">
+              <img src="{% static 'images/0LogoBlack.jpg' %}">
+            </div> 
+
+            <div class="menu">
+              <ul>  
+                <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+                <li><a href="{% url 'events' %}">Events</a></li>
+                <li><a href="{% url 'resources' %}">Resources</a></li>
+                <li><a href="{% url 'aboutus' %}">About</a></li>
+                <li><a href="{% url 'blog' %}">Blog</a></li>
+              </ul>
+            </div>
+          </nav>
+        </header>   
+        
+        <div class="resource-row">
+          <div class="search-content" >   
+            <form onsubmit="submitFn(this, event);">
+              <div class="search-wrapper">
+                <div class="input-holder">
+                    <input type="text" id="myInput" class="search-input" placeholder="Type to search" />
+                    <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+                </div>
+                <span class="close" onclick="searchToggle(this, event);"></span>
+                <div class="result-container"></div>
+              </div>
+            </form>
+
+           
+
+            <div class="search-class">
+              <form action="resources" method="POST">{% csrf_token %}
+                <select class="selectpicker" name="select2" data-show-subtext="true" data-live-search="true">
+                  <option value="none" selected disabled hidden>Select Tag</option> 
+                  <option >Show all</option>
+                  {% for t in tag %}
+                  <option >{{t.name}}</option>
+                  {% endfor %}
+                </select>
+                <button  type="submit" id="submit" name="submit" class="btn btn-info" ><span class="glyphicon glyphicon-search"></span></button>
+              </form>
+            </div>
+          </div>
+          
+          
+          <div class="resource-content " >
+            <div class="resources-card" id="myTable">
+              {% for r in resource %}
+                {% for e in event %}
+                  {% if e.resource_id == r.id_code %}
+                  <div id="tr">
+                    
+                    <div class="cards cards-1" id="res-info" style="background-image: url(static/resourceImg/{{r.symbol}}.png);">
+                      <div class="info"><a href={{r.url_link}}><h3>{{e.title}}</h3></a>
+                      <div class="comment more">{{r.desc}}</div>
+                      {% if r.document != "" %}          
+                        <button type="button" class="btn btn-info" onClick="openTab(this)" name="media/{{r.document}}" style="height: 15%;margin-top:2%;">View Documents</button>
+                      {% endif %}
+                      {% if p.image != "" %}     
+                         <button  type="button" class="btn btn-info" type="button" id="myBtn{{e.id}}" style="height: 15%;margin-top:2%;">Gallery</button>
+                      {% endif %}
+                      </div>
+                      <div class="tags">
+                        <form>
+                          <h5>
+                            {% for rt in r.tag.all %}<a >{{rt}} <i class="fa fa-tag" ></i></a>{% endfor %}
+                          </h5>     
+                        </form>
+                      </div>
+                    </div> 
+ 
+
+                    <div id="myModal{{e.id}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <div class="close">
+                        <span class="close{{e.id}}">&times;</span>
+                      </div>
+
+                      <div class="slideshow-container">
+
+                        {% for p in photos %}
+                          <div class="mySlides fade">
+                            <img  src="/media/{{p.image}}" style="width:100%">     
+                          </div>
+                        {% endfor %}  
+          
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                        
+                        </div>              
+                      </div>
+                    </div>
+                    <script>
+                      var a="{{e.id}}"
+                      var modal = document.getElementById("myModal"+a);
+      
+                      var btn = document.getElementById("myBtn"+a);
+      
+                      var span = document.getElementsByClassName("close"+a)[0];
+      
+                      btn.onclick = function() {
+                        modal.style.display = "block";
+                      }
+      
+                      span.onclick = function() {
+                        modal.style.display = "none";
+                      }
+      
+                      window.onclick = function(event) {
+                        if (event.target == modal) {
+                          modal.style.display = "none";
+                        }
+                      }
+
+                      var slideIndex = 1;
+                      showSlides(slideIndex);
+
+                      function plusSlides(n) {
+                        showSlides(slideIndex += n);
+                      }
+
+                      function currentSlide(n) {
+                        showSlides(slideIndex = n);
+                      }
+                                          
+                                            
+                      function showSlides(n) {
+                        var i;
+                        var slides = document.getElementsByClassName("mySlides");
+                        if (n > slides.length) {slideIndex = 1}    
+                        if (n < 1) {slideIndex = slides.length}
+                        for (i = 0; i < slides.length; i++) {
+                            slides[i].style.display = "none";  
+                        }
+                        slides[slideIndex-1].style.display = "block";  
+                      }
+                    </script>
+                    
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}              
+            </div>
+          </div>
+        </div>
+                          
+        <a style="color:transparent">a</a>
+          <div class="container" ></div>
+
+        <!-- Footer -->
+        <section id="footer" style="margin-top: 10%;">
+          <div class="container">
+            <div class="row text-center text-xs-center text-sm-left text-md-left">
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                <h5>Quick links</h5>
+                <ul class="list-unstyled quick-links">
+                  <li><a href="{% url 'home' %}"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                  <li><a href="{% url 'events' %}"><i class="fa fa-angle-double-right"></i>Events</a></li>
+                  <li><a href="{% url 'resources' %}"><i class="fa fa-angle-double-right"></i>Resources</a></li>
+                  <li><a href="{% url 'aboutus' %}"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+                </ul>
+              </div>
+              <div class="col-xs-24 col-sm-8 col-md-8">
+                <h5>Info</h5>
+                <ul class="list-unstyled quick-links info">
+                  <li class="extra-space"><i class="fa fa-map-marker"></i>
+                    <a href="https://maps.app.goo.gl/GQxmZ268wY8J7USx8"> Commerce Six Roads, Swastik Society, Navrangpura, Ahmedabad, Gujarat 380009</a></li>
+                  <li><i class="fa fa-envelope"></i>
+                      <a href="https://www.google.com/intl/en_in/gmail/about/">Communications@ahduni.edu.in</a></li>
+                  <li class="extra-space"><i class="fa fa-phone"></i>
+                      <a>079 6191 1200</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row remove-space">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+                <ul class="list-unstyled list-inline social text-center">
+                  <li class="list-inline-item"><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                </ul>
+              </div>
+              <hr>
+            </div>	
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">				
+                <p class="h6">Created By:</p><p>  Hetvi Suthar & Rajvi Patel </p>
+              </div>
+              <hr>
+            </div>	
+          </div>
+        </section>
+        <!-- ./Footer -->
+
+      </div><!--Wrapper End-->
+
+    </body>
+
+    <script>
+      // Scrolling Effect
+
+      $(window).on("scroll", function() {
+            if($(window).scrollTop()) {
+              $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+              $('nav').addClass('black');     
+            }
+            else {
+              $('.logo img').attr('src',"{% static 'images/0LogoBlack.jpg' %}");
+              $('nav').removeClass('black');
+            
+            }
+      })
+      // Header Effect
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+            });
+      });
+
+      $(document).ready(function() {
+            $(".logo").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+            });
+      });
+    </script>   
+ 
+    <script type="text/javascript">  /// Script for searching button 
+      function searchToggle(obj, evt){
+          var cont = $(obj).closest('.search-wrapper');
+
+          if(!cont.hasClass('active')){
+                cont.addClass('active');
+                evt.preventDefault();
+          }
+          else if(cont.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+                cont.removeClass('active');
+                // clear input
+                cont.find('.search-input').val('');
+                // clear and hide result container when we press close
+                cont.find('.result-container').fadeOut(100, function(){$(this).empty();});
+          }
+      }
+
+      function submitFn(obj, evt){
+          value = $(obj).find('.search-input').val().trim();
+
+          if(!value.length){
+          }
+          else{
+              _html += "<b>" + value + "</b>";
+          }
+
+          $(obj).find('.result-container').html('<span>' + _html + '</span>');
+          $(obj).find('.result-container').fadeIn(100);
+
+          evt.preventDefault();
+      }
+    </script>
+
+    <script> // To show more Text
+                
+      $(document).ready(function() {
+        var showChar = 60;
+        var ellipsestext = "...";
+        var moretext = "more";
+        var lesstext = "less";
+        $('.more').each(function() {
+          var content = $(this).html();
+
+          if(content.length > showChar) {
+
+            var c = content.substr(0, showChar);
+            var h = content.substr(showChar-1, content.length - showChar);
+
+            var html = c + '<span class="moreelipses">'+ellipsestext+'</span>&nbsp;<span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">'+moretext+'</a></span>';
+
+            $(this).html(html);
+          }
+
+        });
+
+        $(".morelink").click(function(){
+          if($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(moretext);
+          } else {
+            $(this).addClass("less");
+            $(this).html(lesstext);
+          }
+          $(this).parent().prev().toggle();
+          $(this).prev().toggle();
+          return false;
+        });
+      });
+
+    </script>
+    <script> //For Serach button 
+      $(document).ready(function()
+      {
+        $("#myInput").on("keyup", function() 
+        {
+          var value = $(this).val().toLowerCase();
+          $("#myTable #tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          }); 
+        });
+      });
+    </script>  
+  
+</html>

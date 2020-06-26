@@ -1,0 +1,239 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Welcome | PClub</title>
+    <link rel="stylesheet" href="{% static 'style/header.css' %}">
+    <link rel="stylesheet" href="{% static 'style/home.css' %}">
+    <link rel="stylesheet" href="{% static 'style/footer.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  </head>
+
+  <body>
+    <div class="wrapper" >
+      
+      <header>
+        <nav>
+          <div class="menu-icon">
+            <i class="fa fa-bars fa-2x"></i>
+          </div>
+          <div class="logo">
+            <img src="{% static 'images/0LogoBlack.jpg' %}">
+          </div> 
+          <div class="menu">
+            <ul>  
+              <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+              <li><a href="{% url 'events' %}">Events</a></li>
+              <li><a href="{% url 'resources' %}">Resources</a></li>
+              <li><a href="{% url 'aboutus' %}">About</a></li>
+              <li><a href="{% url 'blog' %}">Blog</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>   <!--Header End-->
+      
+      <div class="row-main">    
+        <div class="column-main" >     
+          <div class="main-content" > 
+            <div class='console-container'>
+              <span id='text'></span>
+              <div class='console-underscore' id='console'> &#95;</div>
+            </div>
+            <img src="{% static 'images/1LogoBlack.jpg' %}"  >
+            <h1>Ahmedbad University</h1>
+          </div>
+        </div> <!--column-main End-->
+
+        <div class="column-main">
+          <div class="club-content">
+            </br><h1>|  Who we are</h1>
+            <p>Programming Club is designed for students with an interest in computer science. Some of our focal points include computer programming, web design, and network administration. Our goal is to enhance the skills needed in the field through team projects, tournaments, and guest speakers already involved in workforce.
+              If you’ve ever wanted to unravel the dusty treasure chest of algorithms, there can be no better place in insti. Join us for a pleasant walk in the park of algorithms, marvelling at the structures that are so creatively constructed to organise data and extract useful information from it. We conduct regular sessions to instil the culture of the challenging mind sport of competitive programming, training students towards ICPC and other prestigious contests. </p>
+          </div>
+        </div> <!--column-main End-->
+
+      </div> <!--row-main End-->
+
+      <div class="announcements-content">
+        <h1>|  Announcements</h1>
+        <div class="announcements">
+
+          {% for a in ans %}
+          <div>
+            <h3><i class="fa fa-calendar"></i> {{a.uploaded_at.day}} {{a.uploaded_at|date:'F'}}, {{a.uploaded_at.year}}</h3>
+            <h2>{{a.title}}</h2>
+            <h5>{{a.desc}}</h5>             
+          </div>   
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="row-main">
+        
+        <div class="column-main2" >     
+          <h1 style="color: black;">|  Recent Blog</h1>
+            {% for b in blog %}
+            <div>
+              <h3><i class="fa fa-calendar"></i> {{b.uploaded_at.day}} {{b.uploaded_at|date:'F'}}, {{b.uploaded_at.year}}</h3>
+              <h2><b>{{b.BlogTitle}}</b></h2>
+              <h5>{{b.BlogDesc}}</h5>  
+              <h4><span><i class="fa fa-pencil" style="padding-right: 2%;"></i><b>Posted By: <span class="author-name">{{b.user_name}}</b></span></span>          
+            </div>   
+            {% endfor %}
+        </div> <!--column-main2 End-->
+
+        <div class="column-main2">
+          <img src="{% static 'images/1Coder.gif' %}">
+        </div> <!--column-main2 End-->
+
+      </div> <!--row-main End-->
+
+      <!-- Footer -->
+      <section id="footer">
+        <div class="container">
+          <div class="row text-center text-xs-center text-sm-left text-md-left">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+              <h5>Quick links</h5>
+              <ul class="list-unstyled quick-links">
+                <li><a href="{% url 'home' %}"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                <li><a href="{% url 'events' %}"><i class="fa fa-angle-double-right"></i>Events</a></li>
+                <li><a href="{% url 'resources' %}"><i class="fa fa-angle-double-right"></i>Resources</a></li>
+                <li><a href="{% url 'aboutus' %}"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+                <li><a href="{% url 'blog' %}"><i class="fa fa-angle-double-right"></i>Blog</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-24 col-sm-8 col-md-8">
+              <h5>Info</h5>
+              <ul class="list-unstyled quick-links info">
+                <li class="extra-space"><i class="fa fa-map-marker"></i>
+                  <a href="https://maps.app.goo.gl/GQxmZ268wY8J7USx8"> Commerce Six Roads, Swastik Society, Navrangpura, Ahmedabad, Gujarat 380009</a></li>
+                <li><i class="fa fa-envelope"></i>
+                    <a href="https://www.google.com/intl/en_in/gmail/about/">Communications@ahduni.edu.in</a></li>
+                <li class="extra-space"><i class="fa fa-phone"></i>
+                    <a>079 6191 1200</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row remove-space">
+            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+              <ul class="list-unstyled list-inline social text-center">
+                <li class="list-inline-item"><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                <li class="list-inline-item"><a href="https://www.gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+              </ul>
+            </div>
+            <hr>
+          </div>	
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">				
+              <p class="h6">Created By:</p><p> Rajvi Patel &  Hetvi Suthar </p>
+            </div>
+            <hr>
+          </div>	
+        </div>
+      </section>
+      <!-- ./Footer -->
+          
+      
+    </div> <!--wrapper End-->
+
+     
+  </body>
+
+  <script>
+
+     // Scrolling Effect
+
+     $(window).on("scroll", function() {
+          if($(window).scrollTop()) {
+            $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            $('nav').addClass('black');     
+          }
+          else {
+            $('.logo img').attr('src',"{% static 'images/0LogoBlack.jpg' %}");
+            $('nav').removeClass('black');
+          
+          }
+    })
+    // Header Effect
+    $(document).ready(function() {
+          $(".menu-icon").on("click", function() {
+                $("nav ul").toggleClass("showing");
+                $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+          });
+    });
+
+    $(document).ready(function() {
+          $(".logo").on("click", function() {
+                $("nav ul").toggleClass("showing");
+                $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+          });
+    });
+
+   
+    // Text Effect 
+    consoleText(['Hello World!', 'Welcome to PClub'], 'text',['black','black']);
+
+    function consoleText(words, id, colors) {
+      if (colors === undefined) colors = ['#fff'];
+      var visible = true;
+      var con = document.getElementById('console');
+      var letterCount = 1;
+      var x = 1;
+      var waiting = false;
+      var target = document.getElementById(id)
+      target.setAttribute('style', 'color:' + colors[0])
+      window.setInterval(function() {
+
+        if (letterCount === 0 && waiting === false) {
+          waiting = true;
+          target.innerHTML = words[0].substring(0, letterCount)
+          window.setTimeout(function() {
+            var usedColor = colors.shift();
+            colors.push(usedColor);
+            var usedWord = words.shift();
+            words.push(usedWord);
+            x = 1;
+            target.setAttribute('style', 'color:' + colors[0])
+            letterCount += x;
+            waiting = false;
+          }, 1000)
+        } else if (letterCount === words[0].length + 1 && waiting === false) {
+          waiting = true;
+          window.setTimeout(function() {
+            x = -1;
+            letterCount += x;
+            waiting = false;
+          }, 1000)
+        } else if (waiting === false) {
+          target.innerHTML = words[0].substring(0, letterCount)
+          letterCount += x;
+        }
+      }, 120)
+      window.setInterval(function() {
+        if (visible === true) {
+          con.className = 'console-underscore hidden'
+          visible = false;
+
+        } else {
+          con.className = 'console-underscore'
+
+          visible = true;
+        }
+      }, 400)
+    }
+  </script>
+  
+</html>

@@ -1,0 +1,336 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+{% load log %}
+{% static "images" as baseUrl %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Events | PClub</title>
+      <link rel="stylesheet" href="{% static 'style/header.css' %}">
+      <link rel="stylesheet" href="{% static 'style/event.css' %}">
+      <link rel="stylesheet" href="{% static 'style/footer.css' %}">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    </head>
+    
+    <body>
+      <div class="wrapper" >
+        <header>
+          <nav>
+            <div class="menu-icon">
+              <i class="fa fa-bars fa-2x"></i>
+            </div>
+
+            <div class="logo">
+              <img src="{% static 'images/0LogoBlack.jpg' %}">
+            </div> 
+
+            <div class="menu">
+              <ul>  
+                <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+                <li><a href="{% url 'events' %}">Events</a></li>
+                <li><a href="{% url 'resources' %}">Resources</a></li>
+                <li><a href="{% url 'aboutus' %}">About</a></li>
+                <li><a href="{% url 'blog' %}">Blog</a></li>
+              </ul>
+            </div>
+          </nav>
+        </header> <!--Header End-->  
+        
+        <div class="upcoming-events">
+          <h1>|  Upcoming  Events</h1> <!--Upcoming Events Start--> 
+          </br>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" >
+            <!-- Indicators -->
+            <ol class="carousel-indicators" style="z-index:1000;">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              {% for e in event %}
+                {% if e|state_of_event == 1 %}
+                  <li data-target="#myCarousel"  data-slide-to="{{ forloop.counter }}"></li>
+                {% endif %}
+              {% endfor %}             
+            </ol>
+        
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+        
+              <div class="item active">
+                <img src="{% static 'images/2UpcomingEvent.jpg' %}"  alt="Upcoming events" style="width:100%;height: 80%;">
+                <!---<div class="carousel-caption">
+                  <h3>Los Angeles</h3>
+                  <p>LA is always so much fun!</p>
+                </div>--->
+              </div>
+              {% for e in event %}
+                {% if e|state_of_event == 1 %}
+                  <div href="{{e.url_link}}" class="item">
+                    <img src="/media/{{e.pic}}" alt="{{e.title}}" style="width:100%;height: 80%;">
+                    <div class="carousel-caption">
+                    <!--   <div class="top-right"><i class="fa fa-calendar"></i> {{e.month}} {{e.date}}, {{e.year}}</div>
+                      <h3>{{e.title}}</h3>
+                      <p>{{e.desc}}</p> -->
+                      <div><a href="{{e.url_link}}" target="_blank" class="btn btn-light" role="button">Participate Now!</a></div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+
+            </div>
+        
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>      
+        </div> <!--Upcoming Events End--> 
+
+        <div class="club-content">
+          <h1>|  Live Events</h1>      <!--Live Events Start--> 
+          </br>
+          <div class="live-events">  
+            {% for e in event %}
+              {% if e|state_of_event == 0 %}
+              <div class="flip-card">
+                <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                    <img src="/media/{{e.pic}}" >
+                  </div>
+                  <div class="flip-card-back">
+                    <h1 id="title">{{e.title}}</h1> 
+                    <p id="desc">{{e.desc}}</p>
+                    <h5>Event Ends In</h5>
+                    <div id="timer" class="timer"></div>
+                    <div><a href="{{e.url_link}}" target="_blank" class="btn btn-dark btn-xs" role="button">Participate Now!</a></div>
+                  </div>
+                </div>
+              </div>
+ 
+              <script>   //Script for timer setting
+                
+                var date = new Date("{{e.End_time.month}}/{{e.End_time.day}}/{{e.End_time.year}} {{e.End_time.hour}}:{{e.End_time.minute}}:{{e.End_time.second}}"); // some mock date
+                var milliseconds = date.getTime(); 
+                const today = new Date().getTime();
+                const diff = milliseconds - today;
+
+                let timer = setInterval(function()
+                {
+                  const today = new Date().getTime();
+                  const diff = milliseconds - today;
+
+                  let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                  let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                  let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                  
+                  document.getElementById("timer").innerHTML =
+                    "<div class=\"days\"> \
+                  <div class=\"numbers\">" + days + "</div><div class=\"hr\"></div>days</div> \
+                   <div class=\"hours\"> \
+                  <div class=\"numbers\">" + hours + " </div><div class=\"hr\"></div>hours</div> \
+                  <div class=\"minutes\"> \
+                    <div class=\"numbers\">" + minutes + " </div><div class=\"hr\"></div>mins</div> \
+                  <div class=\"seconds\"> \
+                    <div class=\"numbers\">" + seconds + "</div><div class=\"hr\"></div>secs</div> \
+                  </div>";
+                  
+                }, 1000);
+              </script>
+              {% endif %}
+            {% endfor %}                    
+          </div> <!--Live Events End--> 
+
+          <div class="past-events" >
+            <h1>|  Past Events</h1>      <!--Past Events Start--> 
+            </br>
+              <div class="whole-card">
+                {% for e in event %}
+                  {% if e|state_of_event == -1 %}
+                    <div class="card" >
+                      <div class="d-m-container">
+                        <a class="date-cal"> {{e.date}}</br></a>
+                        <a  class="month-cal">{{e.month|slice:":3"}}</a>           
+                      </div> 
+                      <div class="year-container">
+                        <a class="year-cal">{{e.year}}</a>  
+                      </div>
+                    </div>
+                    <div class="details">
+                      <h4>{{e.title}}</h4>
+                      <a style="color: black;">{{e.desc}}</br></a>
+                      <a class="ob">Organised by: <b> {{e.organised_by}}</b> </a>
+                      
+                    </div>
+                    {% for w in winner %}  
+                      {% if e.winners_id == w.id_code %}
+                        <div class="top-performers">
+                            <button id="myBtn{{w.id_code}}">Top-performers</button>
+                        </div>
+                        <div id="myModal{{w.id_code}}" class="modal">
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                            <div class="close">
+                              <span class="close{{w.id_code}}">&times;</span>
+                            </div>
+                        
+                            <h3 style="text-align: center;">Winners</h3>
+                                <div class="row">
+                                  <div class="column silver-2">
+                                    <img src="/static/images/2WinnerSilver.jpg" class="center">
+                                    <h4>1st Runner-up</h4>
+                                    <h5>{{w.fname_2}} {{w.lname_2}}</h5>
+                                    <h6>{{w.year_2}} year</h6>
+                                  </div>
+                                  <div class="column golden-1" >
+                                    <img src="/static/images/2WinnerGold.jpg" class="center">
+                                    <h4>Winner</h4>
+                                    <h5>{{w.fname_1}} {{w.lname_1}}</h5>
+                                    <h6>{{w.year_1}} Year</h6>
+                                  </div>
+                                  <div class="column bronze-3">
+                                  <img src="/static/images/2WinnerBronze.jpg" class="center">
+                                    <h4>2nd Runner-up</h4>
+                                    <h5>{{w.fname_3}} {{w.lname_3}}</h5>
+                                    <h6>{{w.year_3}} year</h6>
+                                  </div>
+                                  <div class="temp">  <p>temp</p></div>
+                                </div>
+                          </div>
+                        </div>
+                        <script>
+                          var a="{{w.id_code}}"
+                          // Get the modal
+                          var modal = document.getElementById("myModal"+a);
+    
+                          // Get the button that opens the modal
+                          var btn = document.getElementById("myBtn"+a);
+    
+                          // Get the <span> element that closes the modal
+                          var span = document.getElementsByClassName("close"+a)[0];
+    
+                          // When the user clicks the button, open the modal 
+                          btn.onclick = function() {
+                            modal.style.display = "block";
+                          }
+    
+                          // When the user clicks on <span> (x), close the modal
+                          span.onclick = function() {
+                            modal.style.display = "none";
+                          }
+    
+                          // When the user clicks anywhere outside of the modal, close it
+                          window.onclick = function(event) {
+                            if (event.target == modal) {
+                              modal.style.display = "none";
+                            }
+                          }
+                        </script>
+                      {% endif %}
+                    {% endfor %}
+                    <div  class="hor-line" ><hr></div>
+                    <!-- The Modal -->
+                   
+                  {% endif %}
+                {% endfor %}
+              </div>
+          </div> <!--Past Events End--> 
+
+        </div> <!--club-content-->  
+        
+        <!-- Footer -->
+        <section id="footer">
+          <div class="container">
+            <div class="row text-center text-xs-center text-sm-left text-md-left">
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                <h5>Quick links</h5>
+                <ul class="list-unstyled quick-links">
+                  <li><a href="{% url 'home' %}"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                  <li><a href="{% url 'events' %}"><i class="fa fa-angle-double-right"></i>Events</a></li>
+                  <li><a href="{% url 'resources' %}"><i class="fa fa-angle-double-right"></i>Resources</a></li>
+                  <li><a href="{% url 'aboutus' %}"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+                </ul>
+              </div>
+              <div class="col-xs-24 col-sm-8 col-md-8">
+                <h5>Info</h5>
+                <ul class="list-unstyled quick-links info">
+                  <li class="extra-space"><i class="fa fa-map-marker"></i>
+                    <a href="https://maps.app.goo.gl/GQxmZ268wY8J7USx8"> Commerce Six Roads, Swastik Society, Navrangpura, Ahmedabad, Gujarat 380009</a></li>
+                  <li><i class="fa fa-envelope"></i>
+                      <a href="https://www.google.com/intl/en_in/gmail/about/">Communications@ahduni.edu.in</a></li>
+                  <li class="extra-space"><i class="fa fa-phone"></i>
+                      <a>079 6191 1200</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row remove-space">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+                <ul class="list-unstyled list-inline social text-center">
+                  <li class="list-inline-item"><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                </ul>
+              </div>
+              <hr>
+            </div>	
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">				
+                <p class="h6">Created By:</p><p>  Hetvi Suthar & Rajvi Patel </p>
+              </div>
+              <hr>
+            </div>	
+          </div>
+        </section>
+        <!-- ./Footer -->
+
+      </div>    <!--wrapper End-->
+    </body>
+
+    <script>
+      // Scrolling Effect
+
+      $(window).on("scroll", function() {
+            if($(window).scrollTop()) {
+              $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+              $('nav').addClass('black');     
+            }
+            else {
+              $('.logo img').attr('src',"{% static 'images/0LogoBlack.jpg' %}");
+              $('nav').removeClass('black');
+            
+            }
+      })
+      // Header Effect
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+
+      $(document).ready(function() {
+            $(".logo").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+    </script>   
+
+</html>

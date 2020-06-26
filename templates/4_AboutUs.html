@@ -1,0 +1,191 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+{% static "images" as baseUrl %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>AboutUs | PClub</title>
+      <link rel="stylesheet" href="{% static 'style/header.css' %}">
+      
+      <link rel="stylesheet" href="{% static 'style/aboutus.css' %}">
+      <link rel="stylesheet" href="{% static 'style/footer.css' %}">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    </head>
+    
+    <body>
+      <div class="wrapper" >
+        <header>
+          <nav>
+            <div class="menu-icon">
+              <i class="fa fa-bars fa-2x"></i>
+            </div>
+
+            <div class="logo">
+              <img src="{% static 'images/0LogoBlack.jpg' %}" >
+            </div> 
+
+            <div class="menu">
+              <ul>  
+                <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+                <li><a href="{% url 'events' %}">Events</a></li>
+                <li><a href="{% url 'resources' %}">Resources</a></li>
+                <li><a href="{% url 'aboutus' %}">About</a></li>
+                <li><a href="{% url 'blog' %}">Blog</a></li>
+              </ul>
+            </div>
+          </nav>
+        </header>   <!--Header End-->
+        
+        <div class="club-content">
+            <div id="myCarousel" class="carousel slide" data-pause="false" data-ride="carousel" >
+            <div class="carousel-inner">
+        
+              <div class="item active" style="height: 100%;width: 100%;">
+                <img src="{% static 'images/4GalleryPic.jpg' %}"  alt="Upcoming events">
+              </div>
+              {% for i in pics %}
+              <div class="item">
+                <img src="/media/{{i.image}}" alt="{{i.alternative_text}}">
+              </div>
+              {% endfor %}
+
+            </div>
+          </div> <!--myCarousel end-->
+        
+          <div class="whoweare-content">
+            <h1>|  Who we are</h1>
+            <p>Programming Club is designed for students with an interest in computer science. Some of our focal points include computer programming, web design, and network administration. Our goal is to enhance the skills needed in the field through team projects, tournaments, and guest speakers already involved in workforce.
+                If you’ve ever wanted to unravel the dusty treasure chest of algorithms, there can be no better place in insti. Join us for a pleasant walk in the park of algorithms, marvelling at the structures that are so creatively constructed to organise data and extract useful information from it. We conduct regular sessions to instil the culture of the challenging mind sport of competitive programming, training students towards ICPC and other prestigious contests. </p>
+          </div> 
+          <div class="ourteam-content"> 
+            <h1>|  Our team</h1>
+            <div class="profile">   
+              {% for d in detail %}
+              <div class="card">
+                <img src="/media/{{d.image}}">
+                <div class="container-card">
+                  <h4><b>{{d.fname}} {{d.lname}}</b></h4> 
+                  <p>{{d.position}}</p> 
+                  <div class="overlay">
+                    <div class="text">
+                      <div class="field">Codechef Rating:</div>
+                        {% with n=d.codechef_rating %}
+                          {% for i in "x"|ljust:n  %}
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endfor %}
+                        {% endwith %}
+                          
+                        </br><hr>
+                        </br>
+                        <div class="field">
+                            <b>Skills:</b>
+                        </div>
+                        <div class="skills">{{d.skills}}</br></div>
+                        </br><hr>
+                       
+                    </div>
+                  </div>
+                </div>
+              </div> 
+              {% endfor %}
+            </div>
+          </div><!--Our team End-->
+          
+
+        </div> <!--Club Content End-->
+
+        <!-- Footer -->
+        <section id="footer">
+          <div class="container">
+            <div class="row text-center text-xs-center text-sm-left text-md-left">
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                <h5>Quick links</h5>
+                <ul class="list-unstyled quick-links">
+                  <li><a href="{% url 'home' %}"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                  <li><a href="{% url 'events' %}"><i class="fa fa-angle-double-right"></i>Events</a></li>
+                  <li><a href="{% url 'resources' %}"><i class="fa fa-angle-double-right"></i>Resources</a></li>
+                  <li><a href="{% url 'aboutus' %}"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+                </ul>
+              </div>
+              <div class="col-xs-24 col-sm-8 col-md-8">
+                <h5>Info</h5>
+                <ul class="list-unstyled quick-links info">
+                  <li class="extra-space"><i class="fa fa-map-marker"></i>
+                    <a href="https://maps.app.goo.gl/GQxmZ268wY8J7USx8"> Commerce Six Roads, Swastik Society, Navrangpura, Ahmedabad, Gujarat 380009</a></li>
+                  <li><i class="fa fa-envelope"></i>
+                      <a href="https://www.google.com/intl/en_in/gmail/about/">Communications@ahduni.edu.in</a></li>
+                  <li class="extra-space"><i class="fa fa-phone"></i>
+                      <a>079 6191 1200</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row remove-space">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5">
+                <ul class="list-unstyled list-inline social text-center">
+                  <li class="list-inline-item"><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                  <li class="list-inline-item"><a href="https://www.gmail.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                </ul>
+              </div>
+              <hr>
+            </div>	
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">				
+                <p class="h6">Created By:</p><p>  Hetvi Suthar & Rajvi Patel </p>
+              </div>
+              <hr>
+            </div>	
+          </div>
+        </section>
+        <!-- ./Footer -->
+
+      </div><!--Wrapper End-->
+
+    </body>
+
+    <script>
+      // Scrolling Effect
+
+      $(window).on("scroll", function() {
+            if($(window).scrollTop()) {
+              $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+              $('nav').addClass('black');     
+            }
+            else {
+              $('.logo img').attr('src',"{% static 'images/0LogoBlack.jpg' %}");
+              $('nav').removeClass('black');
+            
+            }
+      })
+      // Header Effect
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+
+      $(document).ready(function() {
+            $(".logo").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+                  $('.logo img').attr('src',"{% static 'images/0LogoWhite.jpg' %}");
+            });
+      });
+    </script>   
+
+</html>
