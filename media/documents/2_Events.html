@@ -1,0 +1,306 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+{% load static %}
+{% load log %}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Events | PClub</title>
+      <link rel="stylesheet" href="{% static 'style/Home.css' %}">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    </head>
+    
+    <body>
+      <div class="wrapper" >
+        <header>
+          <nav>
+            <div class="menu-icon">
+              <i class="fa fa-bars fa-2x"></i>
+            </div>
+
+            <div class="logo">
+              <img src="{% static 'images/black_T.png' %}" style="width:50px;height:52px;">
+            </div> 
+
+            <div class="menu">
+              <ul>  
+                <li><a href="{% url 'home' %}"><span>Home</span></a></li>
+                <li><a href="{% url 'events' %}">Events</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="#">About</a></li>
+              </ul>
+            </div>
+          </nav>
+        </header>   
+        
+        <div class="main-content" > 
+             
+        </div>
+
+        <div class="club-content2">
+          <h1>|  Upcoming  Events</h1>
+          </br>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width:80%;margin-left: 10%;">
+            <!-- Indicators -->
+            <ol class="carousel-indicators" style="z-index: 10;">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              {% for e in event %}
+              <li data-target="#myCarousel"  data-slide-to="1"></li>
+              {% endfor %}
+              <script>
+              var n = 0;
+
+              function increment(){
+              
+                n++;
+                return n;
+              }
+              </script>
+            </ol>
+        
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+        
+              <div class="item active">
+                <img src="la.jpg" alt="Los Angeles" style="width:100%;">
+                <div class="carousel-caption">
+                  <h3>Los Angeles</h3>
+                  <p>LA is always so much fun!</p>
+                </div>
+              </div>
+              {% for e in event %}
+              <div href="{{e.url_link}}" class="item">
+                <img src="/media/{{e.pic}}" alt="{{e.title}}" style="width:100%;">
+                <div class="carousel-caption">
+                <!--   <div class="top-right"><i class="fa fa-calendar"></i> {{e.month}} {{e.date}}, {{e.year}}</div>
+                  <h3>{{e.title}}</h3>
+                  <p>{{e.desc}}</p> -->
+                  <div><a href="{{e.url_link}}" target="_blank" class="btn btn-info btn-xs" role="button">Participate Now!</a></div>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+        
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+          
+          
+        
+          <h1>|  Live Events</h1>
+          </br>
+          <div class="live-events">  
+            {% for e in event %}
+              <div class="data">
+                <div class="Text" style="float:left;">
+                  <h3><i class="fa fa-calendar"></i> {{e.month}} {{e.date}}, {{e.year}}<i style="float: right;" id="time" class="fa fa-clock-o"> {{e.time}}</i></h3>
+                  <h2>{{e.title}}</h2>
+                  <h5>{{e.desc}}</h5>  
+                </div>
+                <div class="poster" style="float:right;position: relative;opacity:0.8;">
+                  <img src="/media/{{e.pic}}" style="width:100%;height: 100%;">
+                  <div class="top-right" style="position: absolute;color: aliceblue; top: 2%;right:  2%;"><p id="demo"></p></div>
+                  <div class="bottom-right" style=" position: absolute;bottom:  4%;right:  2%;"><a href="{{e.url_link}}" target="_blank"   class="btn btn-info btn-xs" role="button">Participate Now!</a></div>
+                </div>  
+              </div>
+           
+              <script>
+                var event_id="{{e.id}}"
+                var event_hour = "{{e.time.hour}}"
+                var event_min = "{{e.time.minute}}"
+                var event_second = "{{e.time.second}}"
+                document.getElementById(event_id) 
+                var countdownfunction = setInterval(function() 
+                {
+                
+                  var today = new Date();
+                  var current_hour=today.getHours() ;
+                  var current_min=today.getMinutes() ;
+                  var current_second=today.getSeconds() ;
+                
+                  var distance1 = event_hour - current_hour;
+                  var distance2 = event_min - current_min;
+                  var distance3 = event_second - current_second;
+                 
+                  // Time calculations for days, hours, minutes and seconds
+                  var hours =event_hour - current_hour;
+                  var minutes = event_min - current_min;
+                  var seconds = event_second - current_second;
+                  
+                  // Output the result in an element with id="demo"
+                  document.getElementById("demo").innerHTML =event_id+  hours + "h "
+                  + minutes + "m " + seconds + "s ";
+                  
+                  // If the count down is over, write some text 
+                  if (distance1 >= 0 && distance2 >= 0 && distance3 >= 0  )
+                  {
+                    clearInterval(countdownfunction);
+                    document.getElementById("demo").innerHTML = "EXPIRED";
+                  }
+                }, 1000);
+              </script>          
+            {% endfor %}
+          </div>
+          
+
+          <h1>|  Past Events</h1>
+          </br>
+          <div class="past-event">
+            {% for e in event %}
+            <div class="card">
+              <div class="d-m-container">
+                <a class="date-cal"> {{e.date}}</br></a>
+                <a  class="month-cal">{{e.month|slice:":3"}}</a>           
+              </div> 
+              <div class="year-container">
+                <a class="year-cal">{{e.year}}</a>  
+              </div>
+            </div>
+            <div class="details">
+              <h4>{{e.title}}</h4>
+              <a>{{e.desc}}</br></a>
+              <a class="ob">Organised by: <b> Pclub</b> </a>
+              
+            </div>
+            <div class="top-performers">
+                <button id="myBtn{{e.id}}">Top-performers</button>
+            </div>
+            <div  class="hor-line" ><hr></div>
+            <!-- The Modal -->
+              <div id="myModal{{e.id}}" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                  <div class="close">
+                  <span class="close{{e.id}}">&times;</span>
+                </div>
+                <h3 style="text-align: center;">Event Name</h3>
+                <div class="row">
+                  <div class="column silver-2">
+                    <img src="/static/images/silver.jpg" class="center">
+                    <h4>1st Runner-up</h4>
+                    <h5>Rajvi Patel </h5>
+                    <h6>3rd year</h6>
+                  </div>
+                  <div class="column golden-1" >
+                    <img src="/static/images/gold.jpg" class="center">
+                    <h4>Winner</h4>
+                    <h5>Rajvi Patel </h5>
+                    <h6>2nd Year</h6>
+                  </div>
+                  <div class="column bronze-3">
+                   <img src="/static/images/bronze.jpg" class="center">
+                    <h4>2nd Runner-up</h4>
+                    <h5>Rajvi Patel </h5>
+                    <h6>1st year</h6>
+                  </div>
+                  <div class="temp">  <p>temp</p></div>
+                </div>
+                  
+                </div>
+
+              </div>
+              <script>
+                var a="{{e.id}}"
+                // Get the modal
+                var modal = document.getElementById("myModal"+a);
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("myBtn"+a);
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close"+a)[0];
+
+                // When the user clicks the button, open the modal 
+                btn.onclick = function() {
+                  modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function() {
+                  modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                  if (event.target == modal) {
+                    modal.style.display = "none";
+                  }
+                }
+              </script>
+            {% endfor %}
+          </div>
+          
+ 
+        </div>
+        
+        
+        <footer class="page-footer text-center font-small mt-4 wow fadeIn">
+          <div class="footer">
+            <!-- Social icons -->
+            <div class="pb-4">
+              <a href="#" class="fa fa-facebook-square"></a>
+              <a href="#" class="fa fa-twitter"></a>
+              <a href="#" class="fa fa-google"></a>
+              <a href="#" class="fa fa-linkedin"></a>
+              <a href="#" class="fa fa-youtube"></a>
+              <a href="#" class="fa fa-instagram"></a> 
+              <a href="#" class="fa fa-pinterest"></a>
+            </div>
+            <!-- Social icons -->
+          </div>
+        </footer>
+        <!--/.Footer-->
+
+      </div>    
+    </body>
+
+    <script>
+      $(document).ready(function() {
+            $(".menu-icon").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+            });
+      });
+
+      $(document).ready(function() {
+            $(".logo").on("click", function() {
+                  $("nav ul").toggleClass("showing");
+            });
+      });
+
+      // Scrolling Effect
+
+      $(window).on("scroll", function() {
+            if($(window).scrollTop()) {
+                  $('nav').addClass('black');
+            }
+
+            else {
+                  $('nav').removeClass('black');
+            }
+      })
+    </script>
+
+      
+
+</html>
